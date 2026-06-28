@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+
+  // Verificación en dos pasos (código de 4 dígitos)
+  twoFactorCode      String?
+  twoFactorExpiresAt DateTime?
+
+  // Recuperación de contraseña
+  resetTokenHash      String?
+  resetTokenExpiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  image       String
+  order       Int
+
+  products Product[]
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  price       Float
+  compareAtPrice Float?
+  stock       Int
+  material    String
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  featured   Boolean @default(false)
+  bestSeller Boolean @default(false)
+  newArrival Boolean @default(false)
+  available  Boolean @default(true)
+
+  images  String[]
+  rating  Float    @default(5)
+  reviews Int      @default(0)
+
+  createdAt DateTime @default(now())
+}
+
+model Combo {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  price       Float
+  compareAtPrice Float?
+
+  productIds String[]
+  images     String[]
+  available  Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+}
+
+model StoreConfig {
+  id          String @id @default("store")
+  name        String
+  logo        String
+  slogan      String
+  description String
+  whatsapp    String
+  instagram   String
+  facebook    String
+  address     String
+  hours       String
+  footerInfo  String
+}

@@ -53,7 +53,7 @@ export function Hero({ store }: { store: StoreConfig }) {
         <div className="order-1 lg:order-2">
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-muted sm:aspect-[5/4] lg:aspect-[4/5]">
             <Image
-              src="/images/hero.png"
+              src={store.heroImage || '/images/hero.png'}
               alt="Selección de joyería premium de la marca"
               fill
               priority

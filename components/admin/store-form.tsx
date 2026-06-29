@@ -1,12 +1,20 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { updateStoreAction } from '@/app/admin/(panel)/tienda/store-actions'
 import type { StoreConfig } from '@/types'
+import { ImageUploader, type UploadedImage } from './ImageUploader'
 
 export function StoreForm({ store }: { store: StoreConfig }) {
   const [state, formAction, pending] = useActionState(updateStoreAction, undefined)
+
+  const [heroImages, setHeroImages] = useState<UploadedImage[]>(
+    store.heroImage ? [{ url: store.heroImage, name: 'hero' }] : [],
+  )
+  const [aboutImages, setAboutImages] = useState<UploadedImage[]>(
+    store.aboutImage ? [{ url: store.aboutImage, name: 'about' }] : [],
+  )
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -144,6 +152,28 @@ export function StoreForm({ store }: { store: StoreConfig }) {
             className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
           />
         </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <ImageUploader
+          images={heroImages}
+          onChange={setHeroImages}
+          name="heroImage"
+          folder="homepage"
+          multiple={false}
+          maxImages={1}
+          label="Imagen principal (Hero)"
+        />
+
+        <ImageUploader
+          images={aboutImages}
+          onChange={setAboutImages}
+          name="aboutImage"
+          folder="homepage"
+          multiple={false}
+          maxImages={1}
+          label="Imagen 'Sobre nosotros'"
+        />
       </div>
 
       {state?.error && (

@@ -1,7 +1,8 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import type { Category } from '@/types'
+import { ImageUploader, type UploadedImage } from './ImageUploader'
 
 interface Props {
   action: (prev: unknown, formData: FormData) => Promise<{ error: string } | undefined>
@@ -10,6 +11,9 @@ interface Props {
 
 export function CategoryForm({ action, category }: Props) {
   const [state, formAction, pending] = useActionState(action, null)
+  const [images, setImages] = useState<UploadedImage[]>(
+    category?.image ? [{ url: category.image, name: category.image.split('/').pop() ?? category.image }] : [],
+  )
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -37,20 +41,15 @@ export function CategoryForm({ action, category }: Props) {
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-foreground">
-          Imagen
-          <span className="ml-1 text-xs font-normal text-muted-foreground">
-            (ruta, ej: /images/categories/anillos.jpg)
-          </span>
-        </label>
-        <input
-          name="image"
-          defaultValue={category?.image}
-          placeholder="/images/categories/nombre.jpg"
-          className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
-        />
-      </div>
+      <ImageUploader
+        images={images}
+        onChange={setImages}
+        name="image"
+        folder="categories"
+        multiple={false}
+        maxImages={1}
+        label="Imagen"
+      />
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground">Orden</label>

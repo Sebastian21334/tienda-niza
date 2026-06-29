@@ -1,8 +1,9 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { Combo, Product } from '@/types'
+import { ImageUploader, type UploadedImage } from './ImageUploader'
 
 interface ComboFormProps {
   combo?: Combo
@@ -12,6 +13,9 @@ interface ComboFormProps {
 
 export function ComboForm({ combo, products, action }: ComboFormProps) {
   const [state, formAction, pending] = useActionState(action, undefined)
+  const [images, setImages] = useState<UploadedImage[]>(
+    (combo?.images ?? []).map((url) => ({ url, name: url.split('/').pop() ?? url })),
+  )
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -75,22 +79,14 @@ export function ComboForm({ combo, products, action }: ComboFormProps) {
           />
         </div>
 
-        <div className="flex flex-col gap-1.5 sm:col-span-2">
-          <label htmlFor="images" className="text-sm font-medium text-foreground">
-            Imágenes
-          </label>
-          <input
-            id="images"
+        <div className="sm:col-span-2">
+          <ImageUploader
+            images={images}
+            onChange={setImages}
             name="images"
-            type="text"
-            placeholder="/images/products/combo-1.png, /images/products/combo-2.png"
-            defaultValue={combo?.images.join(', ')}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
+            folder="combos"
+            separator=", "
           />
-          <p className="text-xs text-muted-foreground">
-            Separá varias rutas con coma. Subí los archivos a{' '}
-            <code className="text-foreground">public/images/products/</code> primero.
-          </p>
         </div>
       </div>
 

@@ -10,7 +10,7 @@ export function AboutStrip({ store }: { store: StoreConfig }) {
       <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-card lg:grid-cols-2">
         <div className="relative aspect-square min-h-72 lg:aspect-auto lg:h-full">
           <Image
-            src="/images/about.png"
+            src={store.aboutImage || '/images/about.png'}
             alt="Detalle de joyería usada"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"

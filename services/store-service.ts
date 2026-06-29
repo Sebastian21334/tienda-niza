@@ -51,7 +51,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     ])
 
   const categoryBreakdown = await Promise.all(
-    categories.map(async (c) => ({
+    categories.map(async (c: { name: any; id: string }) => ({
       name: c.name,
       count: await countProductsByCategory(c.id),
     })),

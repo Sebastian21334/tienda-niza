@@ -44,6 +44,8 @@ export interface Combo {
 export interface StoreConfig {
   name: string
   logo: string
+  heroImage?: string
+  aboutImage?: string
   slogan: string
   description: string
   whatsapp: string

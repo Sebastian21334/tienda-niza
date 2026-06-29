@@ -1,7 +1,8 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import type { Category, Product } from '@/types'
+import { ImageUploader, type UploadedImage } from './ImageUploader'
 
 interface Props {
   action: (prev: unknown, formData: FormData) => Promise<{ error: string } | undefined>
@@ -11,6 +12,9 @@ interface Props {
 
 export function ProductForm({ action, categories, product }: Props) {
   const [state, formAction, pending] = useActionState(action, null)
+  const [images, setImages] = useState<UploadedImage[]>(
+    (product?.images ?? []).map((url) => ({ url, name: url.split('/').pop() ?? url })),
+  )
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -110,21 +114,12 @@ export function ProductForm({ action, categories, product }: Props) {
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-foreground">
-          Imágenes
-          <span className="ml-1 text-xs font-normal text-muted-foreground">
-            (una por línea, ej: /images/products/anillo.jpg)
-          </span>
-        </label>
-        <textarea
-          name="images"
-          rows={3}
-          defaultValue={product?.images.join('\n')}
-          placeholder="/images/products/nombre.jpg"
-          className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
-        />
-      </div>
+      <ImageUploader
+        images={images}
+        onChange={setImages}
+        name="images"
+        folder="products"
+      />
 
       <div className="flex flex-wrap gap-6">
         {(

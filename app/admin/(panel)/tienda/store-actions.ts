@@ -14,6 +14,8 @@ export async function updateStoreAction(_prev: unknown, formData: FormData) {
   const hours = (formData.get('hours') as string)?.trim()
   const footerInfo = (formData.get('footerInfo') as string)?.trim()
   const logo = (formData.get('logo') as string)?.trim()
+  const heroImage = (formData.get('heroImage') as string)?.trim()
+  const aboutImage = (formData.get('aboutImage') as string)?.trim()
 
   if (!name || !whatsapp) {
     return { error: 'El nombre y el WhatsApp son obligatorios.' }
@@ -30,6 +32,8 @@ export async function updateStoreAction(_prev: unknown, formData: FormData) {
     hours,
     footerInfo,
     logo,
+    heroImage,
+    aboutImage,
   })
 
   revalidatePath('/admin/tienda')

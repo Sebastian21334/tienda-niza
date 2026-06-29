@@ -86,4 +86,6 @@ model StoreConfig {
   address     String
   hours       String
   footerInfo  String
+  heroImage   String?  
+  aboutImage  String? 
 }

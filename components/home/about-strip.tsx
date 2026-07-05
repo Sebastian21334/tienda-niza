@@ -25,9 +25,8 @@ export function AboutStrip({ store }: { store: StoreConfig }) {
             Piezas pensadas para acompañarte todos los días
           </h2>
           <p className="mt-5 max-w-md leading-relaxed text-muted-foreground">
-            Seleccionamos materiales nobles —oro laminado, plata 925 y perlas de
-            agua dulce— para crear accesorios atemporales que se sienten livianos
-            y se ven elegantes. Cada pieza está pensada para durar y combinar.
+            Cada pieza es seleccionada con atencion al detalle para ofrecer
+            diseños sofisticados, versátiles y pensados para disfrutar todos los dias.
           </p>
           <Button
             render={<Link href="/contacto" />}

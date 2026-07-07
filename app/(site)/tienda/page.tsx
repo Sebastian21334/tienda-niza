@@ -56,8 +56,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
           Toda la colección
         </h1>
         <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-          Piezas pensadas para durar, en metales nobles y acabados cuidados.
-          Encuentra la joya que cuenta tu historia.
+          Encuentra el accesorio que cuenta tu historia.
         </p>
       </header>
 

@@ -46,8 +46,6 @@ export default async function ProductPage({ params }: PageProps) {
 
   const perks = [
     { icon: Truck, label: 'Envíos a todo el país' },
-    { icon: ShieldCheck, label: 'Garantía de 6 meses' },
-    { icon: Sparkles, label: 'Empaque de regalo incluido' },
   ]
 
   return (
@@ -83,10 +81,6 @@ export default async function ProductPage({ params }: PageProps) {
             {product.name}
           </h1>
 
-          <div className="mt-4">
-            <StarRating rating={product.rating} reviews={product.reviews} />
-          </div>
-
           <div className="mt-6 flex items-center gap-3">
             <span className="text-3xl font-medium text-foreground">
               {formatPrice(product.price)}
@@ -107,11 +101,7 @@ export default async function ProductPage({ params }: PageProps) {
             {product.description}
           </p>
 
-          <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-6 text-sm">
-            <div>
-              <dt className="text-muted-foreground">Material</dt>
-              <dd className="mt-1 text-foreground">{product.material}</dd>
-            </div>
+          <dl className="mt-6 border-y border-border py-6 text-sm">
             <div>
               <dt className="text-muted-foreground">Disponibilidad</dt>
               <dd className="mt-1 text-foreground">

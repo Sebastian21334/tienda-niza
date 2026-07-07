@@ -9,6 +9,9 @@ import { ImageUploader, type UploadedImage } from './ImageUploader'
 export function StoreForm({ store }: { store: StoreConfig }) {
   const [state, formAction, pending] = useActionState(updateStoreAction, undefined)
 
+  const [logoImages, setLogoImages] = useState<UploadedImage[]>(
+    store.logo ? [{ url: store.logo, name: 'logo' }] : [],
+  )
   const [heroImages, setHeroImages] = useState<UploadedImage[]>(
     store.heroImage ? [{ url: store.heroImage, name: 'hero' }] : [],
   )
@@ -29,20 +32,6 @@ export function StoreForm({ store }: { store: StoreConfig }) {
             type="text"
             defaultValue={store.name}
             required
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
-          />
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="logo" className="text-sm font-medium text-foreground">
-            Logo (ruta de imagen, opcional)
-          </label>
-          <input
-            id="logo"
-            name="logo"
-            type="text"
-            placeholder="/images/logo.png"
-            defaultValue={store.logo}
             className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
           />
         </div>
@@ -154,7 +143,17 @@ export function StoreForm({ store }: { store: StoreConfig }) {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <ImageUploader
+          images={logoImages}
+          onChange={setLogoImages}
+          name="logo"
+          folder="homepage"
+          multiple={false}
+          maxImages={1}
+          label="Logo"
+        />
+
         <ImageUploader
           images={heroImages}
           onChange={setHeroImages}
@@ -193,4 +192,4 @@ export function StoreForm({ store }: { store: StoreConfig }) {
       </Button>
     </form>
   )
-}
+} 

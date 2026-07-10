@@ -7,8 +7,8 @@ import type { StoreConfig } from '@/types'
 export function AboutStrip({ store }: { store: StoreConfig }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-card lg:grid-cols-2">
-        <div className="relative aspect-square min-h-72 lg:aspect-auto lg:h-full">
+      <div className="grid items-center gap-10 overflow-hidden rounded-3xl bg-card lg:grid-cols-12">
+        <div className="relative aspect-square min-h-72 lg:col-span-5">
           <Image
             src={store.aboutImage || '/images/about.png'}
             alt="Detalle de joyería usada"
@@ -17,7 +17,7 @@ export function AboutStrip({ store }: { store: StoreConfig }) {
             className="object-cover"
           />
         </div>
-        <div className="px-6 py-10 lg:px-12">
+        <div className="px-6 py-10 lg:col-span-7 lg:px-12">
           <span className="text-xs uppercase tracking-[0.2em] text-accent">
             Sobre {store.name}
           </span>
@@ -25,8 +25,9 @@ export function AboutStrip({ store }: { store: StoreConfig }) {
             Piezas pensadas para acompañarte todos los días
           </h2>
           <p className="mt-5 max-w-md leading-relaxed text-muted-foreground">
-            Cada pieza es seleccionada con atencion al detalle para ofrecer
-            diseños sofisticados, versátiles y pensados para disfrutar todos los dias.
+          Niza nació en La Paz, Entre Ríos, con el objetivo de acercar accesorios que 
+          combinen estilo y versatilidad. Hoy también llegamos a Villa María, Córdoba, 
+          ofreciendo piezas seleccionadas para realzar cada momento y acompañarte en tu día a día.
           </p>
           <Button
             render={<Link href="/contacto" />}

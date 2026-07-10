@@ -1,25 +1,31 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
+import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import type { Category } from '@/types'
 
 export function CategoryGrid({ categories }: { categories: Category[] }) {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-      <div className="mb-8 flex flex-col gap-2 text-center">
-        <span className="text-xs uppercase tracking-[0.2em] text-accent">
+    <section className="relative mx-auto max-w-7xl overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <CornerFlourish corner="top-right" size={150} opacity={0.3} className="hidden lg:block" />
+
+      <div className="mb-10 flex flex-col items-center gap-3 text-center">
+        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-accent">
+          <span className="h-px w-6 bg-accent/50" aria-hidden="true" />
           Explorá
+          <span className="h-px w-6 bg-accent/50" aria-hidden="true" />
         </span>
         <h2 className="font-heading text-3xl text-foreground sm:text-4xl">
           Nuestras categorías
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
         {categories.map((category) => (
           <Link
             key={category.id}
             href={`/tienda?categoria=${category.slug}`}
-            className="group relative overflow-hidden rounded-2xl"
+            className="group relative overflow-hidden rounded-2xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-xl hover:shadow-black/10"
           >
             <div className="relative aspect-[3/4] bg-muted">
               <Image
@@ -29,14 +35,22 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                 sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/65 via-foreground/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent transition-opacity duration-300 group-hover:from-foreground/80" />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
             </div>
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <h3 className="font-heading text-xl text-background">
-                {category.name}
-              </h3>
-              <span className="mt-0.5 inline-block text-xs text-background/80">
-                Ver productos
+
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4">
+              <div>
+                <h3 className="font-heading text-xl text-background">
+                  {category.name}
+                </h3>
+                <span className="mt-0.5 inline-block text-xs text-background/80">
+                  Ver productos
+                </span>
+              </div>
+
+              <span className="mb-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-background/15 backdrop-blur-sm transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-accent/90">
+                <ArrowUpRight className="h-3.5 w-3.5 text-background" />
               </span>
             </div>
           </Link>

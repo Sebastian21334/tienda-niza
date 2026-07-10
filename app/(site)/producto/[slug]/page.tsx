@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation'
 import { ChevronRight, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { ProductGallery } from '@/components/products/product-gallery'
 import { WhatsappCta } from '@/components/products/whatsapp-cta'
-import { StarRating } from '@/components/products/star-rating'
 import { ProductCard } from '@/components/products/product-card'
+import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import { getCategoryById } from '@/services/category-service'
 import {
   getProductBySlug,
@@ -46,6 +46,8 @@ export default async function ProductPage({ params }: PageProps) {
 
   const perks = [
     { icon: Truck, label: 'Envíos a todo el país' },
+    { icon: ShieldCheck, label: 'Coordinamos pago y entrega por WhatsApp' },
+    { icon: Sparkles, label: 'Packaging cuidado, listo para regalar' },
   ]
 
   return (
@@ -54,35 +56,48 @@ export default async function ProductPage({ params }: PageProps) {
         className="flex items-center gap-1.5 text-sm text-muted-foreground"
         aria-label="Migas de pan"
       >
-        <Link href="/" className="hover:text-foreground">
+        <Link href="/" className="transition-colors hover:text-accent">
           Inicio
         </Link>
-        <ChevronRight className="size-3.5" />
-        <Link href="/tienda" className="hover:text-foreground">
+        <ChevronRight className="size-3.5 text-muted-foreground/50" />
+        <Link href="/tienda" className="transition-colors hover:text-accent">
           Tienda
         </Link>
-        <ChevronRight className="size-3.5" />
+        <ChevronRight className="size-3.5 text-muted-foreground/50" />
         <span className="text-foreground">{product.name}</span>
       </nav>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <ProductGallery images={product.images} name={product.name} />
 
-        <div className="flex flex-col">
+        <div className="relative flex flex-col">
+          <CornerFlourish
+            corner="top-right"
+            size={140}
+            opacity={0.25}
+            className="hidden lg:block"
+          />
+
           {category && (
             <Link
               href={`/tienda?category=${category.slug}`}
-              className="text-sm uppercase tracking-[0.2em] text-accent"
+              className="text-sm uppercase tracking-[0.2em] text-accent transition-colors hover:text-accent/80"
             >
               {category.name}
             </Link>
           )}
-          <h1 className="mt-3 text-balance text-4xl text-foreground sm:text-5xl">
+          <h1 className="mt-3 text-balance font-heading text-4xl text-foreground sm:text-5xl">
             {product.name}
           </h1>
 
           <div className="mt-6 flex items-center gap-3">
-            <span className="text-3xl font-medium text-foreground">
+            <span
+              className={
+                discount
+                  ? 'text-3xl font-medium text-destructive'
+                  : 'text-3xl font-medium text-foreground'
+              }
+            >
               {formatPrice(product.price)}
             </span>
             {product.compareAtPrice && (
@@ -132,7 +147,9 @@ export default async function ProductPage({ params }: PageProps) {
                 key={perk.label}
                 className="flex items-center gap-3 text-sm text-muted-foreground"
               >
-                <perk.icon className="size-4 text-accent" />
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/10">
+                  <perk.icon className="size-4 text-accent" />
+                </span>
                 {perk.label}
               </li>
             ))}
@@ -142,7 +159,11 @@ export default async function ProductPage({ params }: PageProps) {
 
       {related.length > 0 && (
         <section className="mt-20">
-          <h2 className="text-2xl text-foreground sm:text-3xl">
+          <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-accent">
+            <span className="h-px w-6 bg-accent/50" aria-hidden="true" />
+            Seguí mirando
+          </span>
+          <h2 className="mt-2 font-heading text-2xl text-foreground sm:text-3xl">
             También te puede gustar
           </h2>
           <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">

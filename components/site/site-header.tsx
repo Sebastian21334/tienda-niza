@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, Search } from 'lucide-react'
-import { FaInstagram } from 'react-icons/fa'
+import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import { whatsappLink } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
@@ -30,6 +31,8 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href)
 
+  const waLink = whatsappLink(whatsapp, `Hola ${storeName}, quiero hacer una consulta.`)
+
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -42,10 +45,16 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
             >
               <Menu className="h-5 w-5" />
             </SheetTrigger>
-            <SheetContent side="left" className="w-72 bg-background">
+            <SheetContent side="left" className="relative w-72 overflow-hidden bg-background">
+              <CornerFlourish corner="bottom-right" size={140} opacity={0.25} />
+
               <SheetTitle className="font-heading text-2xl">
                 {storeName}
               </SheetTitle>
+              <span className="-mt-1 block text-[11px] uppercase tracking-[0.2em] text-accent">
+                Accesorios
+              </span>
+
               <nav className="mt-8 flex flex-col gap-1">
                 {navLinks.map((link) => (
                   <Link
@@ -53,7 +62,7 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
                     href={link.href}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      'rounded-md px-3 py-2.5 text-sm transition-colors hover:bg-secondary',
+                      'rounded-md px-3 py-3 text-sm transition-colors hover:bg-secondary active:bg-secondary',
                       isActive(link.href)
                         ? 'font-medium text-accent'
                         : 'text-foreground',
@@ -63,6 +72,31 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
                   </Link>
                 ))}
               </nav>
+
+              <div className="mt-8 flex flex-col gap-3 border-t border-border/70 pt-6">
+                <Button
+                  render={
+                    <a href={waLink} target="_blank" rel="noopener noreferrer" />
+                  }
+                  nativeButton={false}
+                  className="rounded-full bg-foreground text-background hover:bg-foreground/90"
+                >
+                  <FaWhatsapp className="h-4 w-4" />
+                  Contactar por WhatsApp
+                </Button>
+
+                {instagram && (
+                  <a
+                    href={`https://instagram.com/${instagram}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-full border border-foreground/15 py-2 text-sm text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent active:bg-secondary"
+                  >
+                    <FaInstagram className="h-4 w-4" />
+                    Seguinos en Instagram
+                  </a>
+                )}
+              </div>
             </SheetContent>
           </Sheet>
         </div>
@@ -98,9 +132,11 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
             variant="ghost"
             size="icon"
             aria-label="Buscar productos"
+            className="hover:text-accent"
           >
             <Search className="h-5 w-5" />
           </Button>
+
           {instagram && (
             <Button
               render={
@@ -114,19 +150,26 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
               variant="ghost"
               size="icon"
               aria-label="Instagram"
-              className="hidden sm:inline-flex"
+              className="hidden hover:text-accent sm:inline-flex"
             >
               <FaInstagram className="h-5 w-5" />
             </Button>
           )}
+
+          {/* Mobile: solo ícono, siempre visible — el CTA de WhatsApp no puede depender del menú */}
           <Button
-            render={
-              <a
-                href={whatsappLink(whatsapp, `Hola ${storeName}, quiero hacer una consulta.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
+            render={<a href={waLink} target="_blank" rel="noopener noreferrer" />}
+            nativeButton={false}
+            size="icon"
+            aria-label="Contactar por WhatsApp"
+            className="rounded-full bg-foreground text-background hover:bg-foreground/90 sm:hidden"
+          >
+            <FaWhatsapp className="h-4 w-4" />
+          </Button>
+
+          {/* Desktop / tablet: botón completo con texto */}
+          <Button
+            render={<a href={waLink} target="_blank" rel="noopener noreferrer" />}
             nativeButton={false}
             size="sm"
             className="ml-1 hidden rounded-full bg-foreground text-background hover:bg-foreground/90 sm:inline-flex"

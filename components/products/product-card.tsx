@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { StarRating } from '@/components/products/star-rating'
 import { discountPercent, formatPrice } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { Category, Product } from '@/types'
@@ -20,14 +19,18 @@ export function ProductCard({ product, category }: ProductCardProps) {
       className="group flex flex-col"
       aria-label={product.name}
     >
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
+      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-black/10">
         <Image
           src={product.images[0] || '/placeholder.svg'}
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className={cn(
+            'object-cover transition-transform duration-700 ease-out group-hover:scale-105',
+            soldOut && 'opacity-60 grayscale-[0.3]',
+          )}
         />
+        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/10" />
 
         <div className="absolute left-3 top-3 flex flex-col gap-1.5">
           {discount && (
@@ -41,7 +44,7 @@ export function ProductCard({ product, category }: ProductCardProps) {
             </span>
           )}
           {soldOut && (
-            <span className="rounded-full bg-foreground/80 px-2.5 py-1 text-[11px] font-medium text-background">
+            <span className="rounded-full bg-foreground/85 px-2.5 py-1 text-[11px] font-medium text-background">
               Agotado
             </span>
           )}
@@ -62,14 +65,18 @@ export function ProductCard({ product, category }: ProductCardProps) {
         >
           {product.name}
         </h3>
-        <StarRating rating={product.rating} reviews={product.reviews} />
-        <div className="mt-0.5 flex items-baseline gap-2">
+        <div className="mt-1 flex items-baseline gap-2">
           {product.compareAtPrice && (
             <span className="text-sm text-muted-foreground line-through">
               {formatPrice(product.compareAtPrice)}
             </span>
           )}
-          <span className="text-sm font-medium text-foreground">
+          <span
+            className={cn(
+              'text-sm font-medium text-foreground',
+              discount && 'text-destructive',
+            )}
+          >
             {formatPrice(product.price)}
           </span>
         </div>

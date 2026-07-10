@@ -45,57 +45,59 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
             >
               <Menu className="h-5 w-5" />
             </SheetTrigger>
-            <SheetContent side="left" className="relative w-72 overflow-hidden bg-background">
-              <CornerFlourish corner="bottom-right" size={140} opacity={0.25} />
+            <SheetContent side="left" className="w-72 bg-background">
+              <div className="relative flex h-full flex-col overflow-hidden px-6 py-6">
+                <CornerFlourish corner="bottom-right" size={140} opacity={0.25} />
 
-              <SheetTitle className="font-heading text-2xl">
-                {storeName}
-              </SheetTitle>
-              <span className="-mt-1 block text-[11px] uppercase tracking-[0.2em] text-accent">
-                Accesorios
-              </span>
+                <SheetTitle className="font-heading text-2xl">
+                  {storeName}
+                </SheetTitle>
+                <span className="-mt-1 block text-[11px] uppercase tracking-[0.2em] text-accent">
+                  Accesorios
+                </span>
 
-              <nav className="mt-8 flex flex-col gap-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={cn(
-                      'rounded-md px-3 py-3 text-sm transition-colors hover:bg-secondary active:bg-secondary',
-                      isActive(link.href)
-                        ? 'font-medium text-accent'
-                        : 'text-foreground',
-                    )}
+                <nav className="mt-8 flex flex-col gap-1">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        'rounded-md px-3 py-3 text-sm transition-colors hover:bg-secondary active:bg-secondary',
+                        isActive(link.href)
+                          ? 'font-medium text-accent'
+                          : 'text-foreground',
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="mt-8 flex flex-col gap-3 border-t border-border/70 pt-6">
+                  <Button
+                    render={
+                      <a href={waLink} target="_blank" rel="noopener noreferrer" />
+                    }
+                    nativeButton={false}
+                    className="rounded-full bg-foreground text-background hover:bg-foreground/90"
                   >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+                    <FaWhatsapp className="h-4 w-4" />
+                    Contactar por WhatsApp
+                  </Button>
 
-              <div className="mt-8 flex flex-col gap-3 border-t border-border/70 pt-6">
-                <Button
-                  render={
-                    <a href={waLink} target="_blank" rel="noopener noreferrer" />
-                  }
-                  nativeButton={false}
-                  className="rounded-full bg-foreground text-background hover:bg-foreground/90"
-                >
-                  <FaWhatsapp className="h-4 w-4" />
-                  Contactar por WhatsApp
-                </Button>
-
-                {instagram && (
-                  <a
-                    href={`https://instagram.com/${instagram}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 rounded-full border border-foreground/15 py-2 text-sm text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent active:bg-secondary"
-                  >
-                    <FaInstagram className="h-4 w-4" />
-                    Seguinos en Instagram
-                  </a>
-                )}
+                  {instagram && (
+                    <a
+                      href={`https://instagram.com/${instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-full border border-foreground/15 py-2 text-sm text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent active:bg-secondary"
+                    >
+                      <FaInstagram className="h-4 w-4" />
+                      Seguinos en Instagram
+                    </a>
+                  )}
+                </div>
               </div>
             </SheetContent>
           </Sheet>

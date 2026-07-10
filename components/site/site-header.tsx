@@ -158,17 +158,6 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
             </Button>
           )}
 
-          {/* Mobile: solo ícono, siempre visible — el CTA de WhatsApp no puede depender del menú */}
-          <Button
-            render={<a href={waLink} target="_blank" rel="noopener noreferrer" />}
-            nativeButton={false}
-            size="icon"
-            aria-label="Contactar por WhatsApp"
-            className="rounded-full bg-foreground text-background hover:bg-foreground/90 sm:hidden"
-          >
-            <FaWhatsapp className="h-4 w-4" />
-          </Button>
-
           {/* Desktop / tablet: botón completo con texto */}
           <Button
             render={<a href={waLink} target="_blank" rel="noopener noreferrer" />}

@@ -4,6 +4,7 @@ import { getCombos } from '@/services/combo-service'
 import { getProductsByIds } from '@/services/product-service'
 import { getStoreConfig } from '@/services/store-service'
 import { WhatsappCta } from '@/components/products/whatsapp-cta'
+import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import {
   comboInquiryMessage,
   discountPercent,
@@ -27,12 +28,15 @@ export default async function CombosPage() {
   )
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <header className="mb-12 max-w-2xl">
-        <p className="mb-3 text-sm uppercase tracking-[0.2em] text-accent">
+    <div className="relative mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <CornerFlourish corner="top-right" size={170} opacity={0.22} className="hidden lg:block" />
+
+      <header className="relative mb-12 max-w-2xl">
+        <p className="mb-3 inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-accent">
+          <span className="h-px w-6 bg-accent/50" aria-hidden="true" />
           Sets seleccionados
         </p>
-        <h1 className="text-balance text-4xl text-foreground sm:text-5xl">
+        <h1 className="text-balance font-heading text-4xl text-foreground sm:text-5xl">
           Combos para regalar (o regalarte)
         </h1>
         <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
@@ -52,7 +56,7 @@ export default async function CombosPage() {
             return (
               <article
                 key={combo.id}
-                className="grid gap-8 overflow-hidden rounded-2xl border border-border bg-card lg:grid-cols-2"
+                className="grid gap-8 overflow-hidden rounded-2xl bg-card ring-1 ring-black/5 lg:grid-cols-2"
               >
                 <div className="relative aspect-[4/3] bg-muted lg:aspect-auto">
                   <Image
@@ -62,6 +66,7 @@ export default async function CombosPage() {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
                   />
+                  <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
                   {discount && (
                     <span className="absolute left-4 top-4 rounded-full bg-destructive px-3 py-1 text-xs font-medium text-white">
                       Ahorra {discount}%
@@ -69,8 +74,10 @@ export default async function CombosPage() {
                   )}
                 </div>
 
-                <div className="flex flex-col justify-center p-8 lg:p-10">
-                  <h2 className="text-3xl text-foreground">{combo.name}</h2>
+                <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+                  <h2 className="text-balance font-heading text-3xl text-foreground">
+                    {combo.name}
+                  </h2>
                   <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
                     {combo.description}
                   </p>
@@ -92,7 +99,13 @@ export default async function CombosPage() {
                   )}
 
                   <div className="mt-6 flex items-center gap-3">
-                    <span className="text-2xl font-medium text-foreground">
+                    <span
+                      className={
+                        discount
+                          ? 'text-2xl font-medium text-destructive'
+                          : 'text-2xl font-medium text-foreground'
+                      }
+                    >
                       {formatPrice(combo.price)}
                     </span>
                     {combo.compareAtPrice && (

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { MapPin, Clock } from 'lucide-react'
 import { FaFacebook, FaInstagram } from 'react-icons/fa'
+import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import type { Category, StoreConfig } from '@/types'
 
 interface SiteFooterProps {
@@ -10,8 +11,10 @@ interface SiteFooterProps {
 
 export function SiteFooter({ store, categories }: SiteFooterProps) {
   return (
-    <footer className="mt-20 bg-sidebar text-sidebar-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <footer className="relative mt-20 overflow-hidden bg-sidebar text-sidebar-foreground">
+      <CornerFlourish corner="top-right" size={180} opacity={0.2} className="hidden md:block" />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
             <h2 className="font-heading text-2xl">{store.name}</h2>
@@ -25,7 +28,7 @@ export function SiteFooter({ store, categories }: SiteFooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="rounded-full border border-sidebar-border p-2 transition-colors hover:border-sidebar-primary hover:text-sidebar-primary"
+                  className="rounded-full border border-sidebar-border p-2 transition-colors hover:border-sidebar-primary hover:text-sidebar-primary active:bg-sidebar-border/20"
                 >
                   <FaInstagram className="h-4 w-4" />
                 </a>
@@ -36,7 +39,7 @@ export function SiteFooter({ store, categories }: SiteFooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="rounded-full border border-sidebar-border p-2 transition-colors hover:border-sidebar-primary hover:text-sidebar-primary"
+                  className="rounded-full border border-sidebar-border p-2 transition-colors hover:border-sidebar-primary hover:text-sidebar-primary active:bg-sidebar-border/20"
                 >
                   <FaFacebook className="h-4 w-4" />
                 </a>
@@ -83,11 +86,6 @@ export function SiteFooter({ store, categories }: SiteFooterProps) {
               <li>
                 <Link href="/contacto" className="transition-colors hover:text-sidebar-primary">
                   Contacto
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin" className="transition-colors hover:text-sidebar-primary">
-                  Panel admin
                 </Link>
               </li>
             </ul>

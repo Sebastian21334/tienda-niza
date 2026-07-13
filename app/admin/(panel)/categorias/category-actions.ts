@@ -23,6 +23,7 @@ export async function createCategoryAction(_prev: unknown, formData: FormData) {
   if (!input.name) return { error: 'El nombre es obligatorio.' }
   await createCategory(input)
   revalidatePath('/admin/categorias')
+  revalidatePath('/') // 👈 agregado
   redirect('/admin/categorias')
 }
 
@@ -32,10 +33,12 @@ export async function updateCategoryAction(_prev: unknown, formData: FormData) {
   const updated = await updateCategory(id, input)
   if (!updated) return { error: 'Categoría no encontrada.' }
   revalidatePath('/admin/categorias')
+  revalidatePath('/') // 👈 agregado
   redirect('/admin/categorias')
 }
 
 export async function deleteCategoryAction(id: string) {
   await deleteCategory(id)
   revalidatePath('/admin/categorias')
+  revalidatePath('/') // 👈 agregado
 }

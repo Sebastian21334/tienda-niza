@@ -24,7 +24,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
         {categories.map((category) => (
           <Link
             key={category.id}
-            href={`/tienda?categoria=${category.slug}`}
+            href={`/tienda?category=${category.slug}`}
             className="group relative overflow-hidden rounded-2xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-xl hover:shadow-black/10"
           >
             <div className="relative aspect-[3/4] bg-muted">

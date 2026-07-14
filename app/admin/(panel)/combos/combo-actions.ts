@@ -63,6 +63,7 @@ export async function createComboAction(_prev: unknown, formData: FormData) {
   revalidatePath('/admin/combos')
   revalidatePath('/')
   revalidatePath('/tienda')
+  revalidatePath('/combos')
   redirect('/admin/combos')
 }
 
@@ -78,6 +79,7 @@ export async function updateComboAction(
   revalidatePath('/admin/combos')
   revalidatePath('/')
   revalidatePath('/tienda')
+  revalidatePath('/combos')
   redirect('/admin/combos')
 }
 
@@ -86,4 +88,5 @@ export async function deleteComboAction(id: string) {
   revalidatePath('/admin/combos')
   revalidatePath('/')
   revalidatePath('/tienda')
+  revalidatePath('/combos')
 }

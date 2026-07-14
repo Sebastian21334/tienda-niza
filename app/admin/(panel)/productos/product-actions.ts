@@ -43,6 +43,8 @@ export async function createProductAction(_prev: unknown, formData: FormData) {
 
   await createProduct(input)
   revalidatePath('/admin/productos')
+  revalidatePath('/')
+  revalidatePath('/tienda')
   redirect('/admin/productos')
 }
 
@@ -54,10 +56,14 @@ export async function updateProductAction(_prev: unknown, formData: FormData) {
   if (!updated) return { error: 'Producto no encontrado.' }
 
   revalidatePath('/admin/productos')
+  revalidatePath('/')
+  revalidatePath('/tienda')
   redirect('/admin/productos')
 }
 
 export async function deleteProductAction(id: string) {
   await deleteProduct(id)
   revalidatePath('/admin/productos')
+  revalidatePath('/')
+  revalidatePath('/tienda')
 }

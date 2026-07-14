@@ -9,26 +9,128 @@ export interface UploadedImage {
 }
 
 interface ImageUploaderProps {
-  /** Imágenes actuales (controlado desde el padre) */
   images: UploadedImage[]
-  /** Se llama cada vez que cambia la lista (subida nueva o borrado) */
   onChange: (images: UploadedImage[]) => void
-  /** Si se pasa, renderiza un <input type="hidden"> con este name y las URLs
-   *  separadas por salto de línea — útil para formularios con Server Action. */
   name?: string
-  /** Permitir más de una imagen por vez. Default: true */
   multiple?: boolean
-  /** Cantidad máxima de imágenes. Si no se pasa, no hay límite. */
   maxImages?: number
-  /** Tamaño máximo por archivo, en MB. Default: 4 */
   maxFileSizeMB?: number
-  /** Carpeta dentro del Blob Store para organizar (ej: "products", "homepage") */
   folder?: string
-  /** Texto del label. Default: "Imágenes" */
   label?: string
-  /** Separador usado al unir las URLs en el input oculto. Default: '\n' (salto de línea).
-   *  Usar ', ' si el Server Action espera las rutas separadas por coma. */
   separator?: string
+}
+
+interface CompressionResult {
+  file: File
+  originalName: string
+  originalSizeMB: number
+  finalSizeMB: number
+  compressed: boolean
+  reason?: string
+}
+
+/** Redimensiona y comprime una imagen en el navegador antes de subirla */
+async function compressImage(
+  file: File,
+  maxWidth = 1600,
+  quality = 0.8,
+): Promise<CompressionResult> {
+  const originalSizeMB = file.size / 1024 / 1024
+
+  if (!file.type.startsWith('image/')) {
+    return {
+      file,
+      originalName: file.name,
+      originalSizeMB,
+      finalSizeMB: originalSizeMB,
+      compressed: false,
+      reason: 'Tipo de archivo no soportado para compresión',
+    }
+  }
+
+  if (file.type === 'image/gif') {
+    return {
+      file,
+      originalName: file.name,
+      originalSizeMB,
+      finalSizeMB: originalSizeMB,
+      compressed: false,
+      reason: 'Los GIF no se comprimen (podría romper la animación)',
+    }
+  }
+
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, maxWidth / bitmap.width)
+    const width = Math.round(bitmap.width * scale)
+    const height = Math.round(bitmap.height * scale)
+
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    const ctx = canvas.getContext('2d')
+
+    if (!ctx) {
+      return {
+        file,
+        originalName: file.name,
+        originalSizeMB,
+        finalSizeMB: originalSizeMB,
+        compressed: false,
+        reason: 'El navegador no soporta canvas para comprimir',
+      }
+    }
+
+    ctx.drawImage(bitmap, 0, 0, width, height)
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, 'image/webp', quality),
+    )
+
+    if (!blob) {
+      return {
+        file,
+        originalName: file.name,
+        originalSizeMB,
+        finalSizeMB: originalSizeMB,
+        compressed: false,
+        reason: 'No se pudo generar la versión comprimida',
+      }
+    }
+
+    const finalSizeMB = blob.size / 1024 / 1024
+
+    if (blob.size >= file.size) {
+      return {
+        file,
+        originalName: file.name,
+        originalSizeMB,
+        finalSizeMB: originalSizeMB,
+        compressed: false,
+        reason: 'La imagen ya estaba optimizada, se subió el original',
+      }
+    }
+
+    const newName = file.name.replace(/\.[^.]+$/, '.webp')
+    const compressedFile = new File([blob], newName, { type: 'image/webp' })
+
+    return {
+      file: compressedFile,
+      originalName: file.name,
+      originalSizeMB,
+      finalSizeMB,
+      compressed: true,
+    }
+  } catch {
+    return {
+      file,
+      originalName: file.name,
+      originalSizeMB,
+      finalSizeMB: originalSizeMB,
+      compressed: false,
+      reason: 'Error al procesar la imagen, se subió el original',
+    }
+  }
 }
 
 export function ImageUploader({
@@ -44,6 +146,7 @@ export function ImageUploader({
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [compressionInfo, setCompressionInfo] = useState<CompressionResult[]>([])
 
   const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024
 
@@ -53,6 +156,7 @@ export function ImageUploader({
 
     setUploading(true)
     setError(null)
+    setCompressionInfo([])
 
     try {
       const fileList = Array.from(files)
@@ -64,7 +168,12 @@ export function ImageUploader({
         )
       }
 
-      const tooBig = fileList.filter((f) => f.size > maxFileSizeBytes)
+      const results = await Promise.all(fileList.map((f) => compressImage(f)))
+      setCompressionInfo(results)
+
+      const compressedFiles = results.map((r) => r.file)
+
+      const tooBig = compressedFiles.filter((f) => f.size > maxFileSizeBytes)
       if (tooBig.length > 0) {
         const names = tooBig
           .map((f) => `${f.name} (${(f.size / 1024 / 1024).toFixed(1)}MB)`)
@@ -76,7 +185,7 @@ export function ImageUploader({
 
       const newImages: UploadedImage[] = []
 
-      for (const file of fileList) {
+      for (const file of compressedFiles) {
         const blob = await upload(`${folder}/${file.name}`, file, {
           access: 'public',
           handleUploadUrl: '/api/upload',
@@ -125,6 +234,21 @@ export function ImageUploader({
         <p className="text-xs text-muted-foreground">
           Llegaste al máximo de {maxImages} imagen{maxImages! > 1 ? 'es' : ''}. Borrá alguna para subir otra.
         </p>
+      )}
+
+      {!uploading && compressionInfo.length > 0 && (
+        <div className="flex flex-col gap-0.5">
+          {compressionInfo.map((info) => (
+            <p
+              key={info.originalName}
+              className={info.compressed ? 'text-xs text-green-600' : 'text-xs text-muted-foreground'}
+            >
+              {info.compressed
+                ? `✓ ${info.originalName}: comprimida de ${info.originalSizeMB.toFixed(1)}MB a ${info.finalSizeMB.toFixed(1)}MB (${Math.round((1 - info.finalSizeMB / info.originalSizeMB) * 100)}% menos)`
+                : `– ${info.originalName}: no se comprimió (${info.reason})`}
+            </p>
+          ))}
+        </div>
       )}
 
       {images.length > 0 && (

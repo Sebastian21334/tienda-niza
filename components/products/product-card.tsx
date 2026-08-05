@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { discountPercent, formatPrice } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { Category, Product } from '@/types'
+import { AddToCartButton } from './add-to-cart-button'
 
 interface ProductCardProps {
   product: Product
@@ -49,6 +50,12 @@ export function ProductCard({ product, category }: ProductCardProps) {
             </span>
           )}
         </div>
+
+        {!soldOut && (
+          <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <AddToCartButton product={product} variant="icon" />
+          </div>
+        )}
       </div>
 
       <div className="mt-3 flex flex-col gap-1">

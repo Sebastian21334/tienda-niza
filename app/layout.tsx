@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { Playfair_Display } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
+import { CartProvider } from '@/lib/cart-context'
 import { getStoreConfig } from '@/services/store-service'
 import './globals.css'
 
@@ -38,7 +39,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >
       <body className="font-sans antialiased">
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
         <Toaster position="top-center" />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

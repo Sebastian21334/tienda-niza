@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import { whatsappLink } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { CartDrawer } from '@/components/cart/cart-drawer'
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
@@ -128,6 +129,8 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
         </nav>
 
         <div className="flex items-center gap-1">
+          <CartDrawer />
+
           <Button
             render={<Link href="/tienda" />}
             nativeButton={false}

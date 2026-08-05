@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronRight, ShieldCheck, Sparkles, Truck } from 'lucide-react'
 import { ProductGallery } from '@/components/products/product-gallery'
+import { AddToCartButton } from '@/components/products/add-to-cart-button'
 import { WhatsappCta } from '@/components/products/whatsapp-cta'
 import { ProductCard } from '@/components/products/product-card'
 import { CornerFlourish } from '@/components/brand/CornerFlourish'
@@ -131,13 +132,16 @@ export default async function ProductPage({ params }: PageProps) {
                 Producto agotado por el momento
               </p>
             ) : (
-              <WhatsappCta
-                phone={store.whatsapp}
-                message={productInquiryMessage(product.name)}
-              />
+              <div className="flex flex-col gap-3">
+                <AddToCartButton product={product} variant="full" />
+                <WhatsappCta
+                  phone={store.whatsapp}
+                  message={productInquiryMessage(product.name)}
+                />
+              </div>
             )}
             <p className="mt-3 text-center text-xs text-muted-foreground sm:text-left">
-              Te responderemos para coordinar pago y envío.
+              Coordinamos pago y envío por WhatsApp una vez hecho el pedido.
             </p>
           </div>
 

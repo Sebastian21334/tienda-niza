@@ -78,3 +78,16 @@ export interface PaginatedResult<T> {
   perPage: number
   totalPages: number
 }
+
+
+export type CartItem = {
+  id: string;
+  slug: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  type: 'product' | 'combo';
+  /** Stock disponible al momento de agregarlo. undefined = sin límite (ej. combos) */
+  stock?: number;
+};

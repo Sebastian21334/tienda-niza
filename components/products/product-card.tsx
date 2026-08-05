@@ -52,7 +52,7 @@ export function ProductCard({ product, category }: ProductCardProps) {
         </div>
 
         {!soldOut && (
-          <div className="absolute bottom-3 right-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <div className="absolute bottom-3 right-3 opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
             <AddToCartButton product={product} variant="icon" />
           </div>
         )}

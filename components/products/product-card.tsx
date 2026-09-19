@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Star } from 'lucide-react'
 import { discountPercent, formatPrice } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { Category, Product } from '@/types'
@@ -8,23 +9,25 @@ import { AddToCartButton } from './add-to-cart-button'
 interface ProductCardProps {
   product: Product
   category?: Category
+  priority?: boolean
 }
 
-export function ProductCard({ product, category }: ProductCardProps) {
+export function ProductCard({ product, category, priority = false }: ProductCardProps) {
   const discount = discountPercent(product.price, product.compareAtPrice)
   const soldOut = product.stock === 0
 
   return (
     <Link
       href={`/producto/${product.slug}`}
-      className="group flex flex-col"
+      className="group flex h-full flex-col transition-transform duration-500 hover:-translate-y-1"
       aria-label={product.name}
     >
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-muted ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-black/10">
+      <div className="image-shine relative aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-black/5 transition-all duration-500 group-hover:shadow-xl group-hover:shadow-black/10 group-hover:ring-gold/20">
         <Image
           src={product.images[0] || '/placeholder.svg'}
           alt={product.name}
           fill
+          priority={priority}
           sizes="(max-width: 768px) 50vw, 25vw"
           className={cn(
             'object-cover transition-transform duration-700 ease-out group-hover:scale-105',
@@ -58,12 +61,20 @@ export function ProductCard({ product, category }: ProductCardProps) {
         )}
       </div>
 
-      <div className="mt-3 flex flex-col gap-1">
-        {category && (
-          <span className="text-[11px] uppercase tracking-wide text-accent">
-            {category.name}
-          </span>
-        )}
+      <div className="mt-3 flex flex-1 flex-col gap-1">
+        <div className="flex items-center justify-between gap-2">
+          {category && (
+            <span className="text-[10px] uppercase tracking-[0.14em] text-accent">
+              {category.name}
+            </span>
+          )}
+          {product.rating > 0 && (
+            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Star className="size-3 fill-gold text-gold" />
+              {product.rating.toFixed(1)}
+            </span>
+          )}
+        </div>
         <h3
           className={cn(
             'font-heading text-base leading-snug text-foreground',
@@ -72,6 +83,7 @@ export function ProductCard({ product, category }: ProductCardProps) {
         >
           {product.name}
         </h3>
+        <p className="line-clamp-1 text-xs text-muted-foreground">{product.material}</p>
         <div className="mt-1 flex items-baseline gap-2">
           {product.compareAtPrice && (
             <span className="text-sm text-muted-foreground line-through">

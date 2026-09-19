@@ -1,6 +1,7 @@
 import { SiteFooter } from '@/components/site/site-footer'
 import { SiteHeader } from '@/components/site/site-header'
 import { WhatsappFloat } from '@/components/site/whatsapp-float'
+import { AnnouncementBar } from '@/components/site/announcement-bar'
 import { getCategories } from '@/services/category-service'
 import { getStoreConfig } from '@/services/store-service'
 
@@ -16,6 +17,7 @@ export default async function SiteLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
+      <AnnouncementBar />
       <SiteHeader
         storeName={store.name}
         whatsapp={store.whatsapp}

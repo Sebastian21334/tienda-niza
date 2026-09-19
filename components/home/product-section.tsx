@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { ProductCard } from '@/components/products/product-card'
+import { Reveal } from '@/components/motion/reveal'
 import type { Category, Product } from '@/types'
 
 interface ProductSectionProps {
@@ -27,7 +28,7 @@ export function ProductSection({
   return (
     <section className={muted ? 'bg-secondary/50' : undefined}>
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-end justify-between gap-4">
+        <Reveal className="mb-8 flex items-end justify-between gap-4">
           <div className="flex flex-col gap-2">
             <span className="text-xs uppercase tracking-[0.2em] text-accent">
               {eyebrow}
@@ -45,15 +46,16 @@ export function ProductSection({
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              category={findCategory(product.categoryId)}
-            />
+          {products.map((product, index) => (
+            <Reveal key={product.id} delay={index * 75}>
+              <ProductCard
+                product={product}
+                category={findCategory(product.categoryId)}
+              />
+            </Reveal>
           ))}
         </div>
 

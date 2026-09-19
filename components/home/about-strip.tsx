@@ -4,20 +4,21 @@ import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CornerFlourish } from '@/components/brand/CornerFlourish'
 import type { StoreConfig } from '@/types'
+import { Reveal } from '@/components/motion/reveal'
 
 export function AboutStrip({ store }: { store: StoreConfig }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="relative grid items-center gap-10 overflow-hidden rounded-3xl bg-card ring-1 ring-black/5 lg:grid-cols-12">
+      <Reveal className="relative grid items-center gap-10 overflow-hidden rounded-3xl bg-card shadow-[0_30px_80px_rgb(52_43_32/0.07)] ring-1 ring-black/5 lg:grid-cols-12">
         <CornerFlourish corner="bottom-right" size={170} opacity={0.25} className="hidden lg:block" />
 
-        <div className="relative aspect-square min-h-72 lg:col-span-5">
+        <div className="image-shine group relative aspect-square min-h-72 overflow-hidden lg:col-span-5">
           <Image
             src={store.aboutImage || '/images/about.png'}
             alt="Detalle de joyería usada"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.035]"
           />
           <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
         </div>
@@ -48,7 +49,7 @@ export function AboutStrip({ store }: { store: StoreConfig }) {
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Button>
         </div>
-      </div>
+      </Reveal>
     </section>
   )
 }

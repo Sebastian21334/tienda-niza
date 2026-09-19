@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronRight, ShieldCheck, Sparkles, Truck } from 'lucide-react'
+import { ChevronRight, Gem, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react'
 import { ProductGallery } from '@/components/products/product-gallery'
 import { AddToCartButton } from '@/components/products/add-to-cart-button'
 import { WhatsappCta } from '@/components/products/whatsapp-cta'
@@ -14,6 +14,7 @@ import {
 } from '@/services/product-service'
 import { getStoreConfig } from '@/services/store-service'
 import { discountPercent, formatPrice, productInquiryMessage } from '@/lib/format'
+import { Reveal } from '@/components/motion/reveal'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -69,9 +70,11 @@ export default async function ProductPage({ params }: PageProps) {
       </nav>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <ProductGallery images={product.images} name={product.name} />
+        <Reveal direction="left">
+          <ProductGallery images={product.images} name={product.name} />
+        </Reveal>
 
-        <div className="relative flex flex-col">
+        <Reveal direction="right" className="relative flex flex-col lg:sticky lg:top-28 lg:self-start">
           <CornerFlourish
             corner="top-right"
             size={140}
@@ -90,6 +93,19 @@ export default async function ProductPage({ params }: PageProps) {
           <h1 className="mt-3 text-balance font-heading text-4xl text-foreground sm:text-5xl">
             {product.name}
           </h1>
+
+          <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+            <span className="flex items-center gap-0.5 text-gold" aria-label={`${product.rating} de 5 estrellas`}>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Star
+                  key={index}
+                  className={index < Math.round(product.rating) ? 'size-3.5 fill-current' : 'size-3.5'}
+                />
+              ))}
+            </span>
+            <span>{product.rating.toFixed(1)}</span>
+            {product.reviews > 0 && <span>· {product.reviews} opiniones</span>}
+          </div>
 
           <div className="mt-6 flex items-center gap-3">
             <span
@@ -117,11 +133,18 @@ export default async function ProductPage({ params }: PageProps) {
             {product.description}
           </p>
 
-          <dl className="mt-6 border-y border-border py-6 text-sm">
+          <dl className="mt-6 grid grid-cols-2 gap-5 border-y border-border py-6 text-sm">
             <div>
               <dt className="text-muted-foreground">Disponibilidad</dt>
               <dd className="mt-1 text-foreground">
                 {soldOut ? 'Agotado' : `${product.stock} en stock`}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-muted-foreground">Material</dt>
+              <dd className="mt-1 flex items-center gap-1.5 text-foreground">
+                <Gem className="size-3.5 text-gold" />
+                {product.material}
               </dd>
             </div>
           </dl>
@@ -158,7 +181,7 @@ export default async function ProductPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </div>
 
       {related.length > 0 && (
@@ -171,12 +194,13 @@ export default async function ProductPage({ params }: PageProps) {
             También te puede gustar
           </h2>
           <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-4">
-            {related.map((item) => (
-              <ProductCard
-                key={item.id}
-                product={item}
-                category={category}
-              />
+            {related.map((item, index) => (
+              <Reveal key={item.id} delay={index * 75}>
+                <ProductCard
+                  product={item}
+                  category={category}
+                />
+              </Reveal>
             ))}
           </div>
         </section>

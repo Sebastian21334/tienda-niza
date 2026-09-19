@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Suspense } from 'react'
 import { CatalogToolbar } from '@/components/catalog/catalog-toolbar'
 import { CatalogPagination } from '@/components/catalog/catalog-pagination'
@@ -7,6 +8,7 @@ import { getCategories } from '@/services/category-service'
 import { getProducts } from '@/services/product-service'
 import { getStoreConfig } from '@/services/store-service'
 import type { SortOption } from '@/types'
+import { Reveal } from '@/components/motion/reveal'
 
 export const metadata: Metadata = {
   title: 'Tienda',
@@ -48,7 +50,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <header className="mb-10 max-w-2xl">
+      <Reveal as="section" className="mb-10 max-w-2xl">
         <p className="mb-3 text-sm uppercase tracking-[0.2em] text-accent">
           {store.name}
         </p>
@@ -58,7 +60,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
         <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
           Encuentra el accesorio que cuenta tu historia.
         </p>
-      </header>
+      </Reveal>
 
       <Suspense fallback={null}>
         <CatalogToolbar
@@ -76,15 +78,20 @@ export default async function ShopPage({ searchParams }: PageProps) {
             No encontramos joyas que coincidan con tu búsqueda. Prueba con otra
             categoría o término.
           </p>
+          <Link href="/tienda" className="mt-3 rounded-full border border-border bg-card px-5 py-2.5 text-sm transition-colors hover:border-gold/50 hover:text-gold">
+            Limpiar filtros
+          </Link>
         </div>
       ) : (
         <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
-          {items.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              category={categoryById.get(product.categoryId)}
-            />
+          {items.map((product, index) => (
+            <Reveal key={product.id} delay={(index % 4) * 70}>
+              <ProductCard
+                product={product}
+                category={categoryById.get(product.categoryId)}
+                priority={index < 4}
+              />
+            </Reveal>
           ))}
         </div>
       )}

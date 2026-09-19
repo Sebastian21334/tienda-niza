@@ -9,7 +9,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import type { Category, SortOption } from '@/types'
@@ -96,7 +95,9 @@ export function CatalogToolbar({
           >
             <SelectTrigger className="w-[200px] rounded-full bg-card">
               <SlidersHorizontal className="size-4 text-muted-foreground" />
-              <SelectValue />
+              <span className="flex-1 text-left">
+                {SORT_OPTIONS.find((option) => option.value === activeSort)?.label ?? 'Destacados'}
+              </span>
             </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((opt) => (

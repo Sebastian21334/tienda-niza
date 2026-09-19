@@ -35,8 +35,8 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
   const waLink = whatsappLink(whatsapp, `Hola ${storeName}, quiero hacer una consulta.`)
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/88 shadow-[0_8px_30px_rgb(52_43_32/0.025)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/78">
+      <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
@@ -106,9 +106,10 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
 
         <Link
           href="/"
-          className="font-heading text-2xl tracking-tight text-foreground"
+          className="group relative font-heading text-2xl tracking-tight text-foreground"
         >
           {storeName}
+          <span className="absolute -bottom-1 left-1/2 h-px w-0 -translate-x-1/2 bg-gold transition-all duration-500 group-hover:w-full" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -117,9 +118,9 @@ export function SiteHeader({ storeName, whatsapp, instagram }: SiteHeaderProps) 
               key={link.href}
               href={link.href}
               className={cn(
-                'relative text-sm transition-colors hover:text-accent',
+                'relative py-2 text-sm transition-colors duration-300 hover:text-accent',
                 isActive(link.href)
-                  ? 'text-foreground after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-full after:bg-accent'
+                  ? 'text-foreground after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-accent'
                   : 'text-muted-foreground',
               )}
             >

@@ -2,6 +2,8 @@ import { AboutStrip } from '@/components/home/about-strip'
 import { CategoryGrid } from '@/components/home/category-grid'
 import { Hero } from '@/components/home/hero'
 import { ProductSection } from '@/components/home/product-section'
+import { TrustStrip } from '@/components/home/trust-strip'
+import { ExperienceSection } from '@/components/home/experience-section'
 import { getCategories } from '@/services/category-service'
 import {
   getBestSellers,
@@ -23,6 +25,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero store={store} />
+      <TrustStrip />
       <CategoryGrid categories={categories} />
       <ProductSection
         eyebrow="Selección"
@@ -47,6 +50,7 @@ export default async function HomePage() {
         categories={categories}
         viewAllHref="/tienda?sort=best-selling"
       />
+      <ExperienceSection />
     </>
   )
 }

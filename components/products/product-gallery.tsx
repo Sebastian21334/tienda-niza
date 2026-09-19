@@ -15,7 +15,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted ring-1 ring-black/5">
+      <div className="image-shine group relative aspect-square overflow-hidden rounded-3xl bg-muted shadow-[0_25px_70px_rgb(52_43_32/0.08)] ring-1 ring-black/5">
         <Image
           key={active}
           src={gallery[active] || '/placeholder.svg'}
@@ -23,7 +23,7 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="animate-in fade-in object-cover duration-300"
+          className="animate-in fade-in object-cover duration-500 transition-transform group-hover:scale-[1.015]"
         />
         <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
       </div>

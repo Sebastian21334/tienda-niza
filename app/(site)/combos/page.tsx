@@ -10,6 +10,7 @@ import {
   discountPercent,
   formatPrice,
 } from '@/lib/format'
+import { Reveal } from '@/components/motion/reveal'
 
 export const metadata: Metadata = {
   title: 'Combos',
@@ -31,7 +32,7 @@ export default async function CombosPage() {
     <div className="relative mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <CornerFlourish corner="top-right" size={170} opacity={0.22} className="hidden lg:block" />
 
-      <header className="relative mb-12 max-w-2xl">
+      <Reveal as="section" className="relative mb-12 max-w-2xl">
         <p className="mb-3 inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-accent">
           <span className="h-px w-6 bg-accent/50" aria-hidden="true" />
           Sets seleccionados
@@ -43,7 +44,7 @@ export default async function CombosPage() {
           Combinaciones pensadas por nuestro equipo para que luzcas un look
           completo, con un precio más conveniente que comprar por separado.
         </p>
-      </header>
+      </Reveal>
 
       {combosWithItems.length === 0 ? (
         <p className="py-24 text-center text-muted-foreground">
@@ -51,20 +52,22 @@ export default async function CombosPage() {
         </p>
       ) : (
         <div className="flex flex-col gap-12">
-          {combosWithItems.map(({ combo, items }) => {
+          {combosWithItems.map(({ combo, items }, index) => {
             const discount = discountPercent(combo.price, combo.compareAtPrice)
             return (
-              <article
+              <Reveal
                 key={combo.id}
-                className="grid gap-8 overflow-hidden rounded-2xl bg-card ring-1 ring-black/5 lg:grid-cols-2"
+                as="article"
+                delay={index * 100}
+                className="group grid gap-8 overflow-hidden rounded-3xl bg-card shadow-[0_24px_70px_rgb(52_43_32/0.06)] ring-1 ring-black/5 lg:grid-cols-2"
               >
-                <div className="relative aspect-[4/3] bg-muted lg:aspect-auto">
+                <div className="image-shine relative aspect-[4/3] overflow-hidden bg-muted lg:aspect-auto">
                   <Image
                     src={combo.images[0] || '/placeholder.svg'}
                     alt={combo.name}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.025]"
                   />
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
                   {discount && (
@@ -123,7 +126,7 @@ export default async function CombosPage() {
                     />
                   </div>
                 </div>
-              </article>
+              </Reveal>
             )
           })}
         </div>

@@ -11,7 +11,7 @@ interface SiteFooterProps {
 
 export function SiteFooter({ store, categories }: SiteFooterProps) {
   return (
-    <footer className="relative mt-20 overflow-hidden bg-sidebar text-sidebar-foreground">
+    <footer className="relative overflow-hidden border-t border-sidebar-border bg-sidebar text-sidebar-foreground">
       <CornerFlourish corner="top-right" size={180} opacity={0.2} className="hidden md:block" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -55,7 +55,7 @@ export function SiteFooter({ store, categories }: SiteFooterProps) {
               {categories.map((c) => (
                 <li key={c.id}>
                   <Link
-                    href={`/tienda?categoria=${c.slug}`}
+                    href={`/tienda?category=${c.slug}`}
                     className="transition-colors hover:text-sidebar-primary"
                   >
                     {c.name}

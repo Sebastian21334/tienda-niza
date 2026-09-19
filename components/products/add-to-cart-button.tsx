@@ -50,7 +50,7 @@ export function AddToCartButton({ product, variant = 'full', className }: AddToC
         disabled={disabled}
         aria-label={disabled ? label : `Agregar ${product.name} al carrito`}
         className={cn(
-          'flex size-9 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm ring-1 ring-black/5 backdrop-blur transition-all hover:bg-accent hover:text-accent-foreground',
+          'flex size-10 items-center justify-center rounded-full bg-background/92 text-foreground shadow-lg shadow-black/10 ring-1 ring-black/5 backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground active:scale-95',
           disabled && 'cursor-not-allowed opacity-50 hover:bg-background/90 hover:text-foreground',
           className,
         )}
@@ -66,7 +66,7 @@ export function AddToCartButton({ product, variant = 'full', className }: AddToC
       onClick={handleClick}
       disabled={disabled}
       className={cn(
-        'flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90',
+        'flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-medium text-accent-foreground shadow-lg shadow-accent/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-xl active:translate-y-0',
         disabled && 'cursor-not-allowed bg-muted text-muted-foreground hover:bg-muted',
         className,
       )}
